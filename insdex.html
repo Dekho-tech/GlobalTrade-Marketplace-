@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GlobalTrade Market - Worldwide Cross-Border Marketplace</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+  <style>
+    :root {
+      --primary-navy: #0F172A;
+      --accent-blue: #2563EB;
+      --accent-green: #10B981;
+      --bg-light: #F8FAFC;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-light);
+      color: #334155;
+    }
+
+    .navbar { background-color: var(--primary-navy); }
+
+    .hero-section {
+      background: linear-gradient(135deg, var(--primary-navy) 0%, #1E293B 100%);
+      color: white;
+      padding: 80px 0 60px;
+    }
+
+    .category-card {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      cursor: pointer;
+      border: none;
+    }
+
+    .category-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .listing-card {
+      border: 1px solid #E2E8F0;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      background: white;
+    }
+
+    .listing-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.08);
+    }
+
+    .listing-img {
+      height: 200px;
+      object-fit: cover;
+      width: 100%;
+    }
+
+    .btn-favourite {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      color: #64748B;
+      transition: color 0.2s ease;
+    }
+
+    .btn-favourite.active { color: #EF4444; }
+
+    .country-badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    .country-ch { background-color: #FEE2E2; color: #991B1B; }
+    .country-ro { background-color: #FEF3C7; color: #92400E; }
+    .country-br { background-color: #D1FAE5; color: #065F46; }
+    .country-jp { background-color: #E0E7FF; color: #3730A3; }
+    .country-ke { background-color: #DCFCE7; color: #166534; }
+    .country-de { background-color: #F3E8FF; color: #6B21A8; }
+    .country-ae { background-color: #FFEDD5; color: #9A3412; }
+    .country-us { background-color: #E0F2FE; color: #075985; }
+
+    .safety-banner {
+      background-color: #EFF6FF;
+      border-left: 4px solid var(--accent-blue);
+    }
+
+    footer {
+      background-color: var(--primary-navy);
+      color: #94A3B8;
+    }
+
+    footer a {
+      color: #CBD5E1;
+      text-decoration: none;
+    }
+
+    footer a:hover { color: white; }
+  </style>
+</head>
+<body>
+
+  <!-- Toast Container -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;">
+    <div id="actionToast" class="toast align-items-center text-white bg-dark border-0" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body" id="toastMessage">Notification message.</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold fs-4" href="#">
+        <i class="bi bi-globe-americas text-primary me-2"></i>GlobalTrade
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link active" href="#listings">Browse</a></li>
+          <li class="nav-item"><a class="nav-link" href="#markets">Global Hubs</a></li>
+          <li class="nav-item"><a class="nav-link" href="#safety">Trust & Safety</a></li>
+        </ul>
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-light btn-sm" onclick="showToast('Buyer login portal opening...')">Log In</button>
+          <button class="btn btn-success btn-sm" onclick="showToast('Seller onboarding workflow initiated.')">
+            <i class="bi bi-plus-circle me-1"></i> Post Listing
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero-section text-center">
+    <div class="container">
+      <h1 class="display-5 fw-bold mb-3">Global Marketplace for Commercial & Luxury Goods</h1>
+      <p class="lead text-light mb-4 opacity-75">Connect with verified buyers & sellers across North America, Europe, Asia, Africa, and South America.</p>
+
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="input-group input-group-lg shadow-sm">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search vehicles, CNC machines, electronics, equipment..." onkeyup="filterListings()">
+            <button class="btn btn-primary px-4" type="button"><i class="bi bi-search"></i> Search</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container my-5">
+
+    <!-- Safety Alert Banner -->
+    <div class="alert safety-banner p-3 mb-5 rounded shadow-sm d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <div class="d-flex align-items-center">
+        <i class="bi bi-shield-check text-primary fs-3 me-3"></i>
+        <div>
+          <strong class="d-block">Signal Messaging & Security Policy</strong>
+          <small class="text-muted">Optional seller conversations via Signal are supported. Payments must always occur through GlobalTrade Approved Checkout.</small>
+        </div>
+      </div>
+      <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#safetyModal">Read Safety Policy</button>
+    </div>
+
+    <!-- Category Quick Filters -->
+    <section class="mb-5">
+      <h4 class="fw-bold mb-3">Featured Categories</h4>
+      <div class="row g-3">
+        <div class="col-6 col-md-4 col-lg-2">
+          <div class="card category-card text-center p-3 h-100 bg-white" onclick="setCategoryFilter('Vehicles')">
+            <i class="bi bi-car-front fs-1 text-primary mb-2"></i>
+            <h6 class="card-title mb-0">Vehicles</h6>
+          </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+          <div class="card category-card text-center p-3 h-100 bg-white" onclick="setCategoryFilter('Furniture')">
+            <i class="bi bi-house-door fs-1 text-primary mb-2"></i>
+            <h6 class="card-title mb-0">Furniture</h6>
+          </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+          <div class="card category-card text-center p-3 h-100 bg-white" onclick="setCategoryFilter('Electronics')">
+            <i class="bi bi-laptop fs-1 text-primary mb-2"></i>
+            <h6 class="card-title mb-0">Electronics</h6>
+          </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+          <div class="card category-card text-center p-3 h-100 bg-white" onclick="setCategoryFilter('Machinery')">
+            <i class="bi bi-gear-wide-connected fs-1 text-primary mb-2"></i>
+            <h6 class="card-title mb-0">Machinery</h6>
+          </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+          <div class="card category-card text-center p-3 h-100 bg-white" onclick="setCategoryFilter('Equipment')">
+            <i class="bi bi-building-gear fs-1 text-primary mb-2"></i>
+            <h6 class="card-title mb-0">Equipment</h6>
+          </div>
+        </div>
+        <div class="col-6 col-md-4 col-lg-2">
+          <div class="card category-card text-center p-3 h-100 bg-white" onclick="setCategoryFilter('All')">
+            <i class="bi bi-grid-3x3-gap fs-1 text-primary mb-2"></i>
+            <h6 class="card-title mb-0">All Items</h6>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Product Listings Section -->
+    <section id="listings" class="mb-5">
+      <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <h4 class="fw-bold mb-0">International Listings</h4>
+        <div class="btn-group" role="group" id="categoryFilterButtons">
+          <button type="button" class="btn btn-outline-secondary btn-sm active" onclick="filterCategory('All', this)">All</button>
+          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="filterCategory('Vehicles', this)">Vehicles</button>
+          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="filterCategory('Furniture', this)">Furniture</button>
+          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="filterCategory('Electronics', this)">Electronics</button>
+          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="filterCategory('Machinery', this)">Machinery</button>
+          <button type="button" class="btn btn-outline-secondary btn-sm" onclick="filterCategory('Equipment', this)">Equipment</button>
+        </div>
+      </div>
+
+      <div class="row g-4" id="listingsContainer"></div>
+    </section>
+
+    <!-- Global Hub Network -->
+    <section id="markets" class="mb-5">
+      <h4 class="fw-bold mb-3">Global Hub Network</h4>
+      <div class="row g-4">
+        <div class="col-md-4 col-lg-3"><div class="card h-100 border-0 shadow-sm p-3"><div class="d-flex align-items-center mb-2"><span class="fs-3 me-2">🇨🇭</span><div><h6 class="mb-0 fw-bold">Switzerland</h6><small class="text-muted">Zurich, Geneva</small></div></div><p class="small text-muted">Precision engineering, luxury vehicles.</p></div></div>
+        <div class="col-md-4 col-lg-3"><div class="card h-100 border-0 shadow-sm p-3"><div class="d-flex align-items-center mb-2"><span class="fs-3 me-2">🇯🇵</span><div><h6 class="mb-0 fw-bold">Japan</h6><small class="text-muted">Tokyo, Yokohama</small></div></div><p class="small text-muted">Automotive exports, electronics.</p></div></div>
+        <div class="col-md-4 col-lg-3"><div class="card h-100 border-0 shadow-sm p-3"><div class="d-flex align-items-center mb-2"><span class="fs-3 me-2">🇩🇪</span><div><h6 class="mb-0 fw-bold">Germany</h6><small class="text-muted">Frankfurt, Munich</small></div></div><p class="small text-muted">Industrial machinery, commercial tools.</p></div></div>
+        <div class="col-md-4 col-lg-3"><div class="card h-100 border-0 shadow-sm p-3"><div class="d-flex align-items-center mb-2"><span class="fs-3 me-2">🇦🇪</span><div><h6 class="mb-0 fw-bold">UAE</h6><small class="text-muted">Dubai, Abu Dhabi</small></div></div><p class="small text-muted">High-end hardware & equipment.</p></div></div>
+        <div class="col-md-4 col-lg-3"><div class="card h-100 border-0 shadow-sm p-3"><div class="d-flex align-items-center mb-2"><span class="fs-3 me-2">🇰🇪</span><div><h6 class="mb-0 fw-bold">Kenya</h6><small class="text-muted">Nairobi, Mombasa</small></div></div><p class="small text-muted">Teak hardwood, agricultural gear.</p></div></div>
+        <div class="col-md-4 col-lg-3"><div class="card h-100 border-0 shadow-sm p-3"><div class="d-flex align-items-center mb-2"><span class="fs-3 me-2">🇺🇸</span><div><h6 class="mb-0 fw-bold">United States</h6><small class="text-muted">New York, Texas</small></div></div><p class="small text-muted">Enterprise IT, office systems.</p></div></div>
+        <div class="col-md-4 col-lg-3"><div class="card h-100 border-0 shadow-sm p-3"><div class="d-flex align-items-center mb-2"><span class="fs-3 me-2">🇧🇷</span><div><h6 class="mb-0 fw-bold">Brazil</h6><small class="text-muted">São Paulo, Curitiba</small></div></div><p class="small text-muted">Utility 4x4s, commercial machinery.</p></div></div>
+        <div class="col-md-4 col-lg-3"><div class="card h-100 border-0 shadow-sm p-3"><div class="d-flex align-items-center mb-2"><span class="fs-3 me-2">🇷🇴</span><div><h6 class="mb-0 fw-bold">Romania</h6><small class="text-muted">Bucharest, Cluj</small></div></div><p class="small text-muted">Solid wood furniture, tech hardware.</p></div></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Safety Modal -->
+  <div class="modal fade" id="safetyModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold"><i class="bi bi-shield-exclamation text-primary me-2"></i>Global Protection & Payment Policy</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <h6>Optional Signal Messaging Context</h6>
+          <p class="small text-muted">Sellers may provide Signal links for private, end-to-end encrypted inquiry chats.</p>
+          <h6 class="text-danger mt-3">Strict Anti-Scam Rules</h6>
+          <ul class="small text-muted">
+            <li>Never pay via wire transfer, cryptocurrency, or off-site payment links sent in chat apps.</li>
+            <li>All binding orders and deposits must take place inside GlobalTrade Approved Checkout.</li>
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary btn-sm" data-bs-dismiss="modal">I Understand</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="pt-5 pb-4">
+    <div class="container text-center text-md-start">
+      <p class="mb-0">&copy; 2026 GlobalTrade Market Ltd. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Bootstrap 5 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // 1. Image & Title Arrays for Catalog Generation
+    const categoryImages = {
+      Vehicles: [
+        'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?auto=format&fit=crop&w=600&q=80'
+      ],
+      Machinery: [
+        'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=600&q=80'
+      ],
+      Electronics: [
+        'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1526738549149-8e07eca6c147?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1550009158-9ebf69173e03?auto=format&fit=crop&w=600&q=80'
+      ],
+      Furniture: [
+        'https://images.unsplash.com/photo-1615066390971-03e4e1c36ddf?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1538688525198-9b88f6f53126?auto=format&fit=crop&w=600&q=80'
+      ],
+      Equipment: [
+        'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1581092334651-ddf26d9a09d0?auto=format&fit=crop&w=600&q=80',
+        'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=600&q=80'
+      ]
+    };
+
+    const productTitles = {
+      Vehicles: ['Toyota Land Cruiser Prado', 'BMW X3 Commercial Unit', 'Mercedes-Benz Actros', 'Komatsu Utility 4x4'],
+      Machinery: ['KUKA Industrial Robotic Arm', 'Caterpillar Heavy Excavator', 'Haas 5-Axis CNC Mill', 'Industrial Generator Set'],
+      Electronics: ['Apple Mac Studio M2 Ultra', 'Sony Alpha Cinema Rig', 'Dell PowerEdge Server Rack', 'Red Digital Camera'],
+      Furniture: ['Solid African Teak Dining Set', 'Herman Miller Sit-Stand Desk', 'Executive Leather Suite', 'Conference Table Unit'],
+      Equipment: ['Commercial Solar Inverter Bank', 'Diesel Power Station Unit', 'Industrial Water Filtration Rig', 'Heavy Duty Cargo Trailer']
+    };
+
+    const locations = ['Tokyo, Japan', 'Stuttgart, Germany', 'Nairobi, Kenya', 'Dubai, UAE', 'New York, USA', 'Zurich, Switzerland', 'São Paulo, Brazil', 'Bucharest, Romania'];
+
+    // 2. Dynamic Catalog Generator (1,000 Products)
+    function generateMockCatalog(count) {
+      const categories = ['Vehicles', 'Machinery', 'Electronics', 'Furniture', 'Equipment'];
+      return Array.from({ length: count }, (_, i) => {
+        const category = categories[i % 5];
+        const imgs = categoryImages[category];
+        const titles = productTitles[category];
+        return {
+          id: i + 1,
+          title: `${titles[i % titles.length]} #${Math.floor(i / 4) + 1}`,
+          category: category,
+          price: (i * 83 % 84600) + 400,
+          offer_price: i % 4 === 0 ? Math.round(((i * 83 % 84600) + 400) * 0.85) : null,
+          discount_percentage: i % 4 === 0 ? 15 : null,
+          image_url: imgs[i % imgs.length],
+          location: locations[i % locations.length],
+          description: 'Verified international commercial listing with shipping support.'
+        };
+      });
+    }
+
+    function getCountryClass(loc) {
+      if (!loc) return 'country-us';
+      const l = loc.toLowerCase();
+      if (l.includes('switzerland') || l.includes('zurich')) return 'country-ch';
+      if (l.includes('japan') || l.includes('tokyo')) return 'country-jp';
+      if (l.includes('germany') || l.includes('stuttgart')) return 'country-de';
+      if (l.includes('kenya') || l.includes('nairobi')) return 'country-ke';
+      if (l.includes('uae') || l.includes('dubai')) return 'country-ae';
+      if (l.includes('usa') || l.includes('york')) return 'country-us';
+      if (l.includes('brazil') || l.includes('paulo')) return 'country-br';
+      if (l.includes('romania') || l.includes('bucharest')) return 'country-ro';
+      return 'country-us';
+    }
+
+    // 3. Render Cards to Screen
+    function fetchListings() {
+      const container = document.getElementById('listingsContainer');
+      if (!container) return;
+      container.innerHTML = '';
+      const products = generateMockCatalog(1000);
+      products.forEach(item => {
+        const col = document.createElement('div');
+        col.className = 'col-md-6 col-lg-4 listing-item';
+        col.id = `product-${item.id}`;
+        col.setAttribute('data-category', item.category);
+        col.setAttribute('data-title', item.title);
+
+        const badgeClass = getCountryClass(item.location);
+        col.innerHTML = `
+          <div class="listing-card position-relative shadow-sm h-100">
+            ${item.discount_percentage ? `<span class="badge bg-danger position-absolute top-0 start-0 m-2">${item.discount_percentage}% OFF</span>` : ''}
+            <button class="btn-favourite" onclick="toggleFavourite(this)" aria-label="Save Listing"><i class="bi bi-heart-fill"></i></button>
+            <img src="${item.image_url}" class="listing-img" alt="${item.title}">
+            <div class="p-3 d-flex flex-column justify-content-between">
+              <div>
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                  <span class="country-badge ${badgeClass}"><i class="bi bi-geo-alt me-1"></i>${item.location}</span>
+                  <span class="badge bg-light text-dark border">Verified</span>
+                </div>
+                <h5 class="fw-bold fs-6 mb-1">${item.title}</h5>
+                <p class="text-muted small mb-2">${item.description}</p>
+              </div>
+              <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+                <div>
+                  <span class="fs-5 fw-bold text-primary">$${item.offer_price || item.price}</span>
+                  ${item.offer_price ? `<span class="text-muted text-decoration-line-through small ms-1">$${item.price}</span>` : ''}
+                </div>
+                <button class="btn btn-sm btn-outline-primary" onclick="showToast('Inquiry sent for ${item.title}')">Contact Seller</button>
+              </div>
+            </div>
+          </div>
+        `;
+        container.appendChild(col);
+      });
+    }
+
+    // 4. Interaction Logic
+    function filterCategory(category, element) {
+      const buttons = document.querySelectorAll('#categoryFilterButtons button');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      if (element) element.classList.add('active');
+
+      const items = document.querySelectorAll('.listing-item');
+      items.forEach(item => {
+        item.style.display = (category === 'All' || item.getAttribute('data-category') === category) ? 'block' : 'none';
+      });
+    }
+
+    function setCategoryFilter(category) {
+      filterCategory(category, null);
+      const buttons = document.querySelectorAll('#categoryFilterButtons button');
+      buttons.forEach(btn => {
+        if (btn.innerText.trim() === category || (category === 'Equipment' && btn.innerText.includes('Equipment'))) {
+          btn.classList.add('active');
+        } else if (category === 'All' && btn.innerText.trim() === 'All') {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+      const section = document.getElementById('listings');
+      if (section) section.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function filterListings() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const items = document.querySelectorAll('.listing-item');
+      items.forEach(item => {
+        const title = item.getAttribute('data-title').toLowerCase();
+        const category = item.getAttribute('data-category').toLowerCase();
+        item.style.display = (title.includes(query) || category.includes(query)) ? 'block' : 'none';
+      });
+    }
+
+    function toggleFavourite(button) {
+      button.classList.toggle('active');
+      showToast(button.classList.contains('active') ? 'Saved to favourites.' : 'Removed from favourites.');
+    }
+
+    function showToast(message) {
+      const toastEl = document.getElementById('actionToast');
+      const toastMsg = document.getElementById('toastMessage');
+      if (toastEl && toastMsg) {
+        toastMsg.innerText = message;
+        const toast = new bootstrap.Toast(toastEl);
+        toast.show();
+      }
+    }
+
+    // Load instantly
+    document.addEventListener('DOMContentLoaded', fetchListings);
+  </script>
+</body>
+</html>
