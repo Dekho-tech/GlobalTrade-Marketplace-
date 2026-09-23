@@ -123,7 +123,6 @@
       </div>
     </div>
   </div>
-
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
     <div class="container">
@@ -140,7 +139,7 @@
           <li class="nav-item"><a class="nav-link" href="#safety">Trust & Safety</a></li>
         </ul>
         <div class="d-flex gap-2">
-          <button class="btn btn-outline-light btn-sm" onclick="showToast('Buyer login portal opening...')">Log In</button>
+          <button class="btn btn-outline-light btn-sm" onclick="showToast('Buyer Portal: Account status verified active.')"><i class="bi bi-bag-check me-1"></i> Buyer Dashboard</button>
           <button class="btn btn-success btn-sm" onclick="showToast('Seller onboarding workflow initiated.')">
             <i class="bi bi-plus-circle me-1"></i> Post Listing
           </button>
@@ -280,12 +279,55 @@
       </div>
     </div>
   </div>
-
-  <footer class="pt-5 pb-4">
-    <div class="container text-center text-md-start">
-      <p class="mb-0">&copy; 2026 GlobalTrade Market Ltd. All rights reserved.</p>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold fs-4" href="#">
+        <i class="bi bi-globe-americas text-primary me-2"></i>GlobalTrade
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link active" href="#listings">Browse</a></li>
+          <li class="nav-item"><a class="nav-link" href="#markets">Global Hubs</a></li>
+          <li class="nav-item"><a class="nav-link" href="#safety">Trust & Safety</a></li>
+        </ul>
+        <div class="d-flex gap-2">
+       <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold fs-4" href="#">
+        <i class="bi bi-globe-americas text-primary me-2"></i>GlobalTrade
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link active" href="#listings">Browse</a></li>
+          <li class="nav-item"><a class="nav-link" href="#markets">Global Hubs</a></li>
+          <li class="nav-item"><a class="nav-link" href="#safety">Trust & Safety</a></li>
+        </ul>
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-light btn-sm" onclick="showToast('Buyer Portal: Account status verified active.')"><i class="bi bi-bag-check me-1"></i> Buyer Dashboard</button>
+          <button class="btn btn-success btn-sm" onclick="showToast('Seller onboarding workflow initiated.')">
+            <i class="bi bi-plus-circle me-1"></i> Post Listing
+          </button>
+        </div>
+      </div>
     </div>
-  </footer>
+  </nav>
+     ><i class="bi bi-bag-check me-1"></i> Buyer Dashboard</button>
+          <button class="btn btn-success btn-sm" onclick="showToast('Seller onboarding workflow initiated.')">
+            <i class="bi bi-plus-circle me-1"></i> Post Listing
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
 
   <!-- Bootstrap 5 JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -376,7 +418,23 @@
       if (!container) return;
       container.innerHTML = '';
       const products = generateMockCatalog(1000);
-      products.forEach(item => {
+      products.forEach(item =>    function openInquiry(productTitle) {
+      document.getElementById('modalProductTitle').innerText = `Inquiry: ${productTitle}`;
+      const modalEl = document.getElementById('inquiryModal');
+      const modal = new bootstrap.Modal(modalEl);
+      modal.show();
+    }
+
+    function handleInquirySubmit(e) {
+      e.preventDefault();
+      const qty = document.getElementById('inquiryQty').value;
+      const method = document.getElementById('inquiryMethod').value;
+      const modalEl = document.getElementById('inquiryModal');
+      const modal = bootstrap.Modal.getInstance(modalEl);
+      if (modal) modal.hide();
+      showToast(`Inquiry submitted for ${qty} units via ${method}!`);
+    }
+  {
         const col = document.createElement('div');
         col.className = 'col-md-6 col-lg-4 listing-item';
         col.id = `product-${item.id}`;
